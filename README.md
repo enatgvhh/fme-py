@@ -105,8 +105,8 @@ def createSelectSqlScript(feature):
         ref = listBereiche[i].replace("#", "")
         sqlStrFull += ref
         sqlStrFull += sqlStrEnd
-      
-	feature.setAttribute("selectSqlScript",sqlStrFull)
+        
+    feature.setAttribute("selectSqlScript",sqlStrFull)
 ```
 Oder über *for counter, value in enumerate(some_list):*.
 ```
@@ -157,8 +157,7 @@ def createOfficialDocumentList(feature):
     if len(listDocuments) > 0:
         for k in range(len(listDocuments)):
             attrName = "officialDocument{" + str(k) + "}" + ".xlink_href"
-            feature.setAttribute(attrName,listDocuments[k])
-            
+            feature.setAttribute(attrName,listDocuments[k])     
     else:
         attrName1 = "officialDocument{0}.nilReason"
         attrName2 = "officialDocument{0}.xsi_nil"
@@ -253,7 +252,7 @@ class FmeProcess(object):
 
 
 ## FME-Server REST API und Web Services
-FME-Server verfügt über eine [REST-Schnittstelle](https://playground.fmeserver.com/getting-started/introduction/) ([API Version 3](https://docs.safe.com/fme/html/FME_REST/apidoc/v3/#)) und Web Services. Mit *FMEServer.js* wird ein Wrapper auf diese Funktionalität angeboten. Für Python existiert kein SDK, wir müssen unsere [HTTP requests](https://playground.fmeserver.com/python-request/) direkt an die REST-API stellen. Beispielsweise um einen FME-Server Workspace auszuführen oder uns eine Liste aller Repositories ausgeben zu lassen, wie im folgenden GET-Request.
+FME-Server verfügt über eine [REST-Schnittstelle](https://playground.fmeserver.com/getting-started/introduction/) ([API Version 3](https://docs.safe.com/fme/html/FME_REST/apidoc/v3/#)) und Web Services. Mit *FMEServer.js* wird ein Wrapper auf diese Funktionalität angeboten. Für Python existiert kein SDK, wir müssen unsere [HTTP Requests](https://playground.fmeserver.com/python-request/) direkt an die REST-API stellen. Beispielsweise um einen FME-Server Workspace auszuführen oder uns eine Liste aller Repositories ausgeben zu lassen, wie im folgenden GET-Request.
 ```
 GET:
 http://myserver.com/fmerest/v3/repositories
@@ -271,4 +270,4 @@ Im Zusammenhang mit dem Kapitel [Python run FME-Desktop Workbench](#python-run-f
 
 
 ## Summary
-Mit Python können wir und die Arbeit sehr einfach machen und das, wie hier gezeigt, auch im Zusammenspiel mit der FME.
+Mit Python können wir uns die Arbeit sehr einfach machen und das, wie hier gezeigt, auch im Zusammenspiel mit der FME.
