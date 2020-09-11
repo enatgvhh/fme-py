@@ -252,14 +252,47 @@ class FmeProcess(object):
 
 
 ## FME-Server REST API und Web Services
-FME-Server verfügt über eine [REST-Schnittstelle](https://playground.fmeserver.com/getting-started/introduction/) ([API Version 3](https://docs.safe.com/fme/html/FME_REST/apidoc/v3/#)) und Web Services. Mit *FMEServer.js* wird ein Wrapper auf diese Funktionalität angeboten. Für Python existiert kein SDK, wir müssen unsere [HTTP Requests](https://playground.fmeserver.com/python-request/) direkt an die REST-API stellen. Beispielsweise um einen FME-Server Workspace auszuführen oder uns eine Liste aller Repositories ausgeben zu lassen, wie im folgenden GET-Request.
+FME-Server verfügt über eine [REST-Schnittstelle](https://playground.fmeserver.com/getting-started/introduction/) ([API Version 3](https://docs.safe.com/fme/html/FME_REST/apidoc/v3/#)) und Web Services. Mit *FMEServer.js* wird ein Wrapper auf diese Funktionalität angeboten. Für Python existiert kein SDK, wir müssen unsere [HTTP Requests](https://playground.fmeserver.com/python-request/) direkt an die REST-API stellen. Beispielsweise um einen FME-Server Workspace auszuführen oder wie im folgenden Beispiel, um alle fmw-workbench-Files aus den Repositories herunterzuladen.
 ```
-GET:
-http://myserver.com/fmerest/v3/repositories
+# -*- coding: UTF-8 -*-
+#download_items.py
+import requests
+import json
 
-Header:
-Authorization: fmetoken token=xyz123
+def fileDownload(reproName, fileName):
+    url = 'http://myserver.com/fmerest/v3/repositories/' + reproName + '/items/' + fileName
+    headers = {'Accept': 'application/octet-stream',
+               'Accept-Language': 'de,en-US;q=0.7,en;q=0.3',
+               'Accept-Encoding': 'gzip, deflate',
+               'Authorization': 'fmetoken token=xyz1234',
+               'AcceptContent-Disposition': 'attachment'
+               }
+    filePath = 'D:/Download_FME_Server/' + reproName + '/' + fileName
+    
+    r = requests.get(url, headers=headers)
+    
+    with open(filePath, 'wb') as f:
+        f.write(r.content)
+        f.close()
+        
+    print(reproName + ": " + fileName + " successfully downloaded")
 
+if __name__ == '__main__':
+    reproList = ['INSPIRE_gdilabor', 'INSPIRE_gml', 'INSPIRE_sync', 'INSPIRE_utils']
+    
+    for repro in reproList:
+        url = 'http://myserver.com/fmerest/v3/repositories/' + repro +'/items'
+        headers = {'Authorization': 'fmetoken token=xyz1234'}
+        
+        r = requests.get(url, headers=headers)
+        
+        for dictKey, dictValue in json.loads(r.text).items():
+            if dictKey == 'items':
+                for item in dictValue:    
+                    for itemKey, itemValue in item.items():
+                        if itemKey == 'name':
+                            fileDownload(repro, itemValue)
+                            
 ```
 
 
