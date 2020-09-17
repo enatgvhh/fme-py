@@ -277,7 +277,7 @@ def fileDownload(reproName, fileName):
         
     print(reproName + ": " + fileName + " successfully downloaded")
 
-if __name__ == '__main__':
+def main():
     reproList = ['INSPIRE_gdilabor', 'INSPIRE_gml', 'INSPIRE_sync', 'INSPIRE_utils']
     
     for repro in reproList:
@@ -293,6 +293,8 @@ if __name__ == '__main__':
                         if itemKey == 'name':
                             fileDownload(repro, itemValue)
                             
+if __name__ == '__main__':
+    main()
 ```
 
 
