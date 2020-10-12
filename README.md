@@ -256,6 +256,7 @@ FME-Server verfügt über eine [REST-Schnittstelle](https://playground.fmeserver
 ```
 # -*- coding: UTF-8 -*-
 #download_items.py
+from __future__ import absolute_import, division, print_function, unicode_literals
 import requests
 import json
 
@@ -273,7 +274,6 @@ def fileDownload(reproName, fileName):
     
     with open(filePath, 'wb') as f:
         f.write(r.content)
-        f.close()
         
     print(reproName + ": " + fileName + " successfully downloaded")
 
@@ -284,15 +284,14 @@ def main():
         url = 'http://myserver.com/fmerest/v3/repositories/' + repro +'/items'
         headers = {'Authorization': 'fmetoken token=xyz1234'}
         
-        r = requests.get(url, headers=headers)
+        r = requests.get(url, headers=headers)       
+        jsonData = json.loads(r.text)
+        items = jsonData['items']
         
-        for dictKey, dictValue in json.loads(r.text).items():
-            if dictKey == 'items':
-                for item in dictValue:    
-                    for itemKey, itemValue in item.items():
-                        if itemKey == 'name':
-                            fileDownload(repro, itemValue)
-                            
+        for element in items:
+            wbName = element['name']
+            fileDownload(repro, wbName)
+                
 if __name__ == '__main__':
     main()
 ```
